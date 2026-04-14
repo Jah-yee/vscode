@@ -1738,8 +1738,14 @@ export class DisableForWorkspaceAction extends ExtensionAction {
 
 	update(): void {
 		this.enabled = false;
+		this.hidden = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped && this.extensionService.extensions.some(e => areSameExtensions({ id: e.identifier.value, uuid: e.uuid }, this.extension!.identifier) && this.workspaceContextService.getWorkbenchState() !== WorkbenchState.EMPTY)) {
 			if (ExtensionIdentifier.equals(this.extension.identifier.id, this.productService.defaultChatAgent?.chatExtensionId)) {
+				return;
+			}
+			// Hide Disable (Workspace) action if extension is already disabled globally
+			if (this.extension.enablementState === EnablementState.DisabledGlobally) {
+				this.hidden = true;
 				return;
 			}
 			this.enabled = this.extension.state === ExtensionState.Installed
@@ -1775,8 +1781,14 @@ export class DisableGloballyAction extends ExtensionAction {
 
 	update(): void {
 		this.enabled = false;
+		this.hidden = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped && this.extensionService.extensions.some(e => areSameExtensions({ id: e.identifier.value, uuid: e.uuid }, this.extension!.identifier))) {
 			if (ExtensionIdentifier.equals(this.extension.identifier.id, this.productService.defaultChatAgent?.chatExtensionId)) {
+				return;
+			}
+			// Hide Disable action if extension is only disabled for workspace (nothing to disable globally)
+			if (this.extension.enablementState === EnablementState.DisabledWorkspace) {
+				this.hidden = true;
 				return;
 			}
 			this.enabled = this.extension.state === ExtensionState.Installed
