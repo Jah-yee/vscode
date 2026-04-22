@@ -17,7 +17,7 @@ import { Emitter, Event } from '../../../../base/common/event.js';
 import { KeyCode, KeyMod } from '../../../../base/common/keyCodes.js';
 import { Disposable, DisposableStore, MutableDisposable, dispose, toDisposable } from '../../../../base/common/lifecycle.js';
 import { Schemas, matchesScheme } from '../../../../base/common/network.js';
-import { isNative } from '../../../../base/common/platform.js';
+import { isNative, language as platformLanguage } from '../../../../base/common/platform.js';
 import { isUndefined } from '../../../../base/common/types.js';
 import { URI } from '../../../../base/common/uri.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
@@ -1265,13 +1265,13 @@ class AdditionalDetailsWidget extends Disposable {
 				$('.more-info-entry', undefined,
 					$('div.more-info-entry-name', undefined, localize('published', "Published")),
 					$('div', {
-						'title': new Date(gallery.releaseDate).toString()
+						'title': new Date(gallery.releaseDate).toLocaleDateString(platformLanguage)
 					}, fromNow(gallery.releaseDate, true, true, true))
 				),
 				$('.more-info-entry', undefined,
 					$('div.more-info-entry-name', undefined, localize('last released', "Last Released")),
 					$('div', {
-						'title': new Date(gallery.lastUpdated).toString()
+						'title': new Date(gallery.lastUpdated).toLocaleDateString(platformLanguage)
 					}, fromNow(gallery.lastUpdated, true, true, true))
 				)
 			);
